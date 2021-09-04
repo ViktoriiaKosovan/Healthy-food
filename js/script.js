@@ -268,46 +268,111 @@ document.addEventListener("DOMContentLoaded", () => {
     prevArrow=document.querySelector('.offer__slider-prev'),
     nextArrow=document.querySelector('.offer__slider-next'),
     total = document.querySelector('#total'),
-    current = document.querySelector('#current');
+    current = document.querySelector('#current'),
+    sliderWrapper=document.querySelector('.offer__slider-wrapper'),
+    sliderInner=document.querySelector('.offer__slider-inner'),
+    sliderBlock=document.querySelector('.offer__slider');
 
     let sliderIndex=1;
+    let offSet=0;
 
-    showSlides(sliderIndex);
-
-    if (sliders.length<10) {
-        if (sliders.length < 10) {
-            total.textContent = `0${sliders.length}`;
-        } else {
-            total.textContent = sliders.length;
-        }
+  
+    if (sliders.length < 10) {
+                    total.textContent = `0${sliders.length}`;
+    } else {
+                    total.textContent = sliders.length;
     }
+            
 
-    function showSlides(n){
-        if(n>sliders.length){
-            sliderIndex=1;
-        } else if (n<1){
-            sliderIndex=sliders.length; 
+    let width=window.getComputedStyle(sliderWrapper).width;
+    sliders.forEach(item=> item.style.width=width);
+    sliderInner.style.width=100*sliders.length+'%';
+    sliderInner.style.display='flex';
+    sliderInner.style.transition = '0.5s all';
+    sliderWrapper.style.overflow = 'hidden';
+
+    nextArrow.addEventListener('click', ()=>{
+        if(offSet==+width.slice(0, width.length-2)*(sliders.length-1)) {
+            offSet=0;
+        } else {
+            offSet+=+width.slice(0, width.length - 2); 
         }
-        sliders.forEach(item=>item.style.display='none');
-        sliders[sliderIndex-1].style.display='block';
+        sliderInner.style.transform = `translateX(-${offSet}px)`;
+       
+        if (sliderIndex == sliders.length) {
+            sliderIndex = 1;
+        } else {
+            sliderIndex++;
+        }
 
         if (sliders.length < 10) {
             current.textContent =  `0${sliderIndex}`;
         } else {
             current.textContent =  sliderIndex;
         }
-    }
+        
+    })
 
-    function plusSlides (n) {
-        showSlides(sliderIndex += n);
-}
+    prevArrow.addEventListener('click', ()=>{
+        if(offSet===0) {
+            offSet=+width.slice(0, width.length-2)*(sliders.length-1)
+        } else {
+            offSet-=+width.slice(0, width.length - 2); 
+        }
+        sliderInner.style.transform = `translateX(-${offSet}px)`;
+        if (sliderIndex == 1) {
+            sliderIndex = sliders.length;
+        } else {
+            sliderIndex--;
+        }
 
-    prevArrow.addEventListener('click', function(){
-        plusSlides(-1);
+        if (sliders.length < 10) {
+            current.textContent =  `0${sliderIndex}`;
+        } else {
+            current.textContent =  sliderIndex;
+        }
     });
 
-    nextArrow.addEventListener('click', function(){
-        plusSlides(1);
-    });
+    
+    
+   
 
-    });
+//     showSlides(sliderIndex);
+
+//     if (sliders.length<10) {
+//         if (sliders.length < 10) {
+//             total.textContent = `0${sliders.length}`;
+//         } else {
+//             total.textContent = sliders.length;
+//         }
+//     }
+
+//     function showSlides(n){
+//         if(n>sliders.length){
+//             sliderIndex=1;
+//         } else if (n<1){
+//             sliderIndex=sliders.length; 
+//         }
+//         sliders.forEach(item=>item.style.display='none');
+//         sliders[sliderIndex-1].style.display='block';
+
+//         if (sliders.length < 10) {
+//             current.textContent =  `0${sliderIndex}`;
+//         } else {
+//             current.textContent =  sliderIndex;
+//         }
+//     }
+
+//     function plusSlides (n) {
+//         showSlides(sliderIndex += n);
+// }
+
+//     prevArrow.addEventListener('click', function(){
+//         plusSlides(-1);
+//     });
+
+//     nextArrow.addEventListener('click', function(){
+//         plusSlides(1);
+//     });
+
+});
